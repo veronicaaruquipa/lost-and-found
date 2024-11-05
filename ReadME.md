@@ -16,7 +16,7 @@ with a mock user service to retrieve user information.
 - *Jackson*
 - *Lombok*
 - *Docker Compose* (for containerization)
-- *Oracle* (for database)
+- *Oracle* (dockerized Oracle database) must be up and running.
 
 ## How to
 
@@ -42,19 +42,19 @@ with a mock user service to retrieve user information.
 
 * Upload Lost Items:
    ```sh   
-   POST /api/lost-items/upload
+   curl -X POST -F "file=@C:\\<file-directory>\\LostItems.pdf" http://localhost:8080/api/lost-items/upload
 
 * Read Lost Items:
    ```sh
-   GET /api/lost-items/all-lost-items
+   curl -X GET "http://localhost:8080/api/lost-items"
     
 * Claim Lost Item:
   ```sh
-  POST /api/lost-items/claim
+  curl -X POST "http://localhost:8080/api/lost-items/claim" -d "lostItemId=43" -d "userId=1001" -d "quantity=2"
 
 * Retrieve Claims:
   ```sh
-  GET /api/lost-items/claims
+  curl -X GET "http://localhost:8080/api/lost-items/claims"
 
 ### Out of Scope
 * Detailed user authentication and authorization mechanisms.
