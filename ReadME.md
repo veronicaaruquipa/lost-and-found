@@ -1,32 +1,11 @@
 # Lost and Found Application
 
-## The Story
+## Getting Started
+### Purpose
 
 The Lost and Found application is designed to help manage lost items and their claims. It provides REST API endpoints
 for administrators to upload and manage lost items, and for users to claim lost items. The application also integrates
 with a mock user service to retrieve user information.
-
-## Requirements
-
-1. **Upload & Store Data**: A REST API Admin endpoint to upload lost items with details from a file. The application
-   should extract and store the following information from the uploaded file:
-    - ItemName
-    - Quantity
-    - Place
-
-2. **Read LostItems**: A REST API user endpoint to read the saved lost items.
-
-3. **Claim LostItem Data and Save**: A REST API user endpoint for users to claim the lost item. For example, User 1001
-   claimed certain items and certain quantities from the retrieved list and store them with their user ID. Note: One
-   LostItem can be claimed by more than one user.
-
-4. **Retrieve LostItems Claimed by People**: A REST API Admin endpoint to read all the lost items and users (userId and
-   name) associated with that.
-
-5. **Retrieve User Information from User Service**: This will be another service (a mock service) to get user details
-   like the name of the user. Consider writing the least code as this is only a mock.
-
-## Getting Started
 
 ### Tech Stack
 
@@ -39,12 +18,12 @@ with a mock user service to retrieve user information.
 - *Docker Compose* (for containerization)
 - *Oracle* (for database)
 
-## How to Get Started
+## How to
 
 1. **Clone the Repository**
    ```sh
-   git clone <repository-url>
-   cd lost-and-found-app
+   git clone https://github.com/veronicaaruquipa/lost-and-found.git
+   cd lost-and-found
 
 2. **Build the Project**
    ```sh
@@ -77,6 +56,6 @@ with a mock user service to retrieve user information.
   ```sh
   GET /api/lost-items/claims
 
-6. **Out of Scope**
+### Out of Scope
 * Detailed user authentication and authorization mechanisms.
 * Advanced error handling and logging.
