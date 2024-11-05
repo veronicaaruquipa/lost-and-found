@@ -41,7 +41,7 @@ public class LostItemService {
 
         claim = claimRepository.save(claim);
 
-        log.info(String.format("User %s (ID: %d) claimed %d of %s", userName, userId, quantity, lostItem.getItemName()));
+        log.info(String.format("User %s (ID: %d) claimed %d %s(s).", userName, userId, quantity, lostItem.getItemName()));
 
         return claim;
     }
