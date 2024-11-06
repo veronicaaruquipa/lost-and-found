@@ -7,6 +7,7 @@ import org.example.lostandfoundapp.model.LostItem;
 import org.example.lostandfoundapp.service.LostItemService;
 import org.example.lostandfoundapp.util.PdfFileParserUtil;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -27,6 +28,7 @@ public class LostItemController {
         this.lostItemService = lostItemService;
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/upload")
     public ResponseEntity<String> uploadFile(@RequestParam("file") MultipartFile file) {
         List<LostItem> items = readLostItemsFromPDF(file);
@@ -37,6 +39,7 @@ public class LostItemController {
         return ResponseEntity.ok("File uploaded and items saved successfully.");
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
     public LostItem createLostItem(@RequestBody LostItemDTO lostItemDTO) {
         LostItem lostItem = new LostItem();
@@ -48,18 +51,21 @@ public class LostItemController {
         return lostItemService.saveLostItem(lostItem);
     }
 
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     @GetMapping()
     public List<LostItem> getAllLostItems() {
         log.info("All lost items are being retrieved from the database.");
         return lostItemService.getAllLostItems();
     }
 
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     @PostMapping("/claim")
     public ResponseEntity<Claim> claimItem(@RequestParam Long lostItemId, @RequestParam Long userId, @RequestParam int quantity) {
         Claim claim = lostItemService.claimItem(lostItemId, userId, quantity);
         return ResponseEntity.ok(claim);
     }
 
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     @GetMapping("/claims")
     public ResponseEntity<List<Claim>> getAllClaims() {
         List<Claim> claims = lostItemService.getAllClaims();
