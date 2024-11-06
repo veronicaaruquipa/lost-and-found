@@ -39,3 +39,22 @@ with a mock user service to retrieve user information.
    docker-compose up
 
 5. **Access the Endpoints**
+* Upload Lost Items:
+  ```sh   
+  curl -X POST -F "file=@C:\\<file-directory>\\LostItems.pdf" http://localhost:8080/api/lost-items/upload
+
+* Read Lost Items:
+   ```sh
+   curl -X GET "http://localhost:8080/api/lost-items"
+    
+* Claim Lost Item:
+  ```sh
+  curl -X POST "http://localhost:8080/api/lost-items/claim" -d "lostItemId=43" -d "userId=1001" -d "quantity=2"
+
+* Retrieve Claims:
+  ```sh
+  curl -X GET "http://localhost:8080/api/lost-items/claims"
+
+### Out of Scope
+* Detailed user authentication and authorization mechanisms.
+* Advanced error handling and logging.
