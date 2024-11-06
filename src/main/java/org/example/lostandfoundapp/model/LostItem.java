@@ -12,6 +12,7 @@ import lombok.Setter;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Positive;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,6 +28,7 @@ public class LostItem {
     private String itemName;
 
     @Min(value = 1, message = "Quantity must be at least 1")
+    @Positive(message = "Quantity must be positive")
     private int quantity;
 
     @NotBlank(message = "Place is mandatory")

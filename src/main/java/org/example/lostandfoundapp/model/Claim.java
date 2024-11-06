@@ -12,6 +12,7 @@ import lombok.Setter;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Positive;
 
 @Entity
 @Getter
@@ -25,6 +26,7 @@ public class Claim {
     private Long userId;
 
     @Min(value = 1, message = "Quantity must be at least 1")
+    @Positive(message = "Quantity must be positive")
     private int quantity;
 
     @ManyToOne
