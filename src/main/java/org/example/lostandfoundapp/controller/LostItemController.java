@@ -40,10 +40,11 @@ public class LostItemController {
     @PostMapping
     public LostItem createLostItem(@RequestBody LostItemDTO lostItemDTO) {
         LostItem lostItem = new LostItem();
-        // Map lost item fields from DTO to entity
+
         lostItem.setItemName(lostItemDTO.getItemName());
         lostItem.setQuantity(lostItemDTO.getQuantity());
         lostItem.setPlace(lostItemDTO.getPlace());
+
         return lostItemService.saveLostItem(lostItem);
     }
 

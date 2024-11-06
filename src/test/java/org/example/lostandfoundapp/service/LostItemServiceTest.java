@@ -1,5 +1,7 @@
 package org.example.lostandfoundapp.service;
 
+import org.example.lostandfoundapp.exception.InvalidQuantityException;
+import org.example.lostandfoundapp.exception.InvalidUserIdException;
 import org.example.lostandfoundapp.model.Claim;
 import org.example.lostandfoundapp.model.LostItem;
 import org.example.lostandfoundapp.repository.ClaimRepository;
@@ -20,6 +22,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 class LostItemServiceTest {
@@ -86,22 +89,16 @@ class LostItemServiceTest {
         Claim claim = lostItemService.claimItem(1L, 1001L, 1);
 
         assertNotNull(claim);
-    }
-
-    @Test
-    void testGetAllClaimsFromAnEmptyDatabase() {
-        when(claimRepository.findAll()).thenReturn(Collections.emptyList());
-
-        List<Claim> claims = lostItemService.getAllClaims();
-
-        assertTrue(claims.isEmpty());
+        assertEquals(1, lostItem.getQuantity());
+        verify(lostItemRepository).save(lostItem);
     }
 
     @Test
     void testClaimItemWithInvalidLostItemId() {
         when(lostItemRepository.findById(anyLong())).thenReturn(Optional.empty());
 
-        assertThrows(RuntimeException.class, () -> lostItemService.claimItem(1L, 1001L, 1));
+        RuntimeException exception = assertThrows(RuntimeException.class, () -> lostItemService.claimItem(1L, 1001L, 1));
+        assertEquals("Item not found", exception.getMessage());
     }
 
     @Test
@@ -113,17 +110,42 @@ class LostItemServiceTest {
         when(lostItemRepository.findById(anyLong())).thenReturn(Optional.of(lostItem));
         when(mockUserService.getUserName(anyLong())).thenReturn("Unknown User");
 
-        assertThrows(RuntimeException.class, () -> lostItemService.claimItem(1L, 9999L, 1));
+        InvalidUserIdException exception = assertThrows(InvalidUserIdException.class, () -> lostItemService.claimItem(1L, 9999L, 1));
+        assertEquals("Invalid user ID. Please provide an existing user ID.", exception.getMessage());
     }
 
     @Test
-    void testClaimItemWithQuantityExceedsAvailable() {
+    void testClaimItemWithQuantityExceedingAvailability() {
         LostItem lostItem = new LostItem();
         lostItem.setItemName("Laptop");
         lostItem.setQuantity(1);
 
         when(lostItemRepository.findById(anyLong())).thenReturn(Optional.of(lostItem));
 
-        assertThrows(RuntimeException.class, () -> lostItemService.claimItem(1L, 1001L, 2));
+        InvalidQuantityException exception = assertThrows(InvalidQuantityException.class, () -> lostItemService.claimItem(1L, 1001L, 2));
+        assertEquals("Invalid quantity: it must be greater than 0 and less than or equal to the available quantity. \n" +
+                "Invalid claim quantity: 2 for lostItemId: 1. Requested quantity is 2 and available quantity is 1", exception.getMessage());
+    }
+
+    @Test
+    void testClaimItemWithNegativeQuantity() {
+        LostItem lostItem = new LostItem();
+        lostItem.setItemName("Laptop");
+        lostItem.setQuantity(2);
+
+        when(lostItemRepository.findById(anyLong())).thenReturn(Optional.of(lostItem));
+
+        InvalidQuantityException exception = assertThrows(InvalidQuantityException.class, () -> lostItemService.claimItem(1L, 1001L, -1));
+        assertEquals("Invalid quantity: it must be greater than 0 and less than or equal to the available quantity. \n" +
+                "Invalid claim quantity: -1 for lostItemId: 1. Requested quantity is -1 and available quantity is 2", exception.getMessage());
+    }
+
+    @Test
+    void testGetAllClaimsFromAnEmptyDatabase() {
+        when(claimRepository.findAll()).thenReturn(Collections.emptyList());
+
+        List<Claim> claims = lostItemService.getAllClaims();
+
+        assertTrue(claims.isEmpty());
     }
 }

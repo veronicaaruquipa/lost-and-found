@@ -59,20 +59,28 @@ public class LostItemService {
      * @throws InvalidQuantityException if the quantity is invalid
      */
     public Claim claimItem(Long lostItemId, Long userId, int quantity) {
-        LostItem lostItem = lostItemRepository.findById(lostItemId).orElseThrow(() -> new RuntimeException("Item not found"));
+        log.info("Starting claim process for lostItemId: {}, userId: {}, quantity: {}", lostItemId, userId, quantity);
+
+        LostItem lostItem = lostItemRepository.findById(lostItemId).orElseThrow(() -> {
+            log.error("Item not found for lostItemId: {}", lostItemId);
+            return new RuntimeException("Item not found");
+        });
 
         String userName = mockUserService.getUserName(userId);
         if ("Unknown User".equals(userName)) {
-            throw new InvalidUserIdException("Invalid user ID");
+            log.error("Invalid user ID: {}", userId);
+            throw new InvalidUserIdException("Invalid user ID. Please provide an existing user ID.");
         }
 
-        if (lostItem.getQuantity() <= 0) {
-            throw new InvalidQuantityException("Invalid quantity: it must be greater than 0.");
+        if (quantity <= 0 || quantity > lostItem.getQuantity()) {
+            String errorMessage = String.format("Invalid claim quantity: %d for lostItemId: %d. Requested quantity is %d and available quantity is %d",
+                    quantity, lostItemId, quantity, lostItem.getQuantity());
+            log.error(errorMessage);
+            throw new InvalidQuantityException("Invalid quantity: it must be greater than 0 and less than or equal to the available quantity. \n" + errorMessage);
         }
 
-        if (quantity > lostItem.getQuantity()) {
-            throw new InvalidQuantityException("Invalid quantity: it must be less than or equal to the available quantity.");
-        }
+        lostItem.setQuantity(lostItem.getQuantity() - quantity);
+        lostItemRepository.save(lostItem);
 
         Claim claim = new Claim();
         claim.setUserId(userId);
@@ -81,7 +89,7 @@ public class LostItemService {
 
         claim = claimRepository.save(claim);
 
-        log.info(String.format("User %s (ID: %d) claimed %d %s(s) in the %s.", userName, userId, quantity, lostItem.getItemName(), lostItem.getPlace()));
+        log.info("User {} (ID: {}) successfully claimed {} {}(s) in the {}.", userName, userId, quantity, lostItem.getItemName(), lostItem.getPlace());
 
         return claim;
     }
