@@ -16,7 +16,7 @@ with a mock user service to retrieve user information.
 - *Jackson*
 - *Lombok*
 - *Docker Compose* (for containerization)
-- *Oracle* (dockerized Oracle database) must be up and running.
+- *Oracle* (dockerized Oracle database). To run the app, Oracle must be up and running.
 
 ## How to
 
