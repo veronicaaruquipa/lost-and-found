@@ -1,0 +1,30 @@
+version: '3.8'
+
+services:
+  oracle-db:
+    image: container-registry.oracle.com/database/express:21.3.0-xe
+    container_name: oracle-express-db
+    ports:
+      - "1521:1521"
+      - "5500:5500"
+    environment:
+      - DB_NAME=XEPDB1
+      - DB_USER=<DB_USER_NAME>
+      - ORACLE_PWD=<DB_USER_PASSWORD>
+    volumes:
+      - oracle-data:/opt/oracle/oradata
+
+  lost-and-found-app:
+    build: .
+    ports:
+      - "8080:8080"
+    depends_on:
+      - oracle-db
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:oracle:thin:@localhost:1521/XEPDB1
+      SPRING_DATASOURCE_USERNAME: <DB_USER_NAME>
+      SPRING_DATASOURCE_PASSWORD: <DB_USER_PASSWORD>
+
+volumes:
+  oracle-data:
+    driver: local
