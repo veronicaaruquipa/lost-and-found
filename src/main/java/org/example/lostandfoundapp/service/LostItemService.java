@@ -24,6 +24,13 @@ public class LostItemService {
         this.mockUserService = mockUserService;
     }
 
+    /**
+     * Saves a lost item to the repository.
+     *
+     * @param lostItem the lost item to save
+     * @return the saved lost item
+     * @throws InvalidQuantityException if the quantity of the lost item is less than or equal to 0
+     */
     public LostItem saveLostItem(LostItem lostItem) {
         if (lostItem.getQuantity() <= 0) {
             throw new InvalidQuantityException("Invalid quantity: it must be greater than 0.");
@@ -31,10 +38,26 @@ public class LostItemService {
         return lostItemRepository.save(lostItem);
     }
 
+    /**
+     * Retrieves all lost items from the repository.
+     *
+     * @return a list of all lost items
+     */
     public List<LostItem> getAllLostItems() {
         return lostItemRepository.findAll();
     }
 
+    /**
+     * Claims a lost item for a user.
+     *
+     * @param lostItemId the ID of the lost item to claim
+     * @param userId     the ID of the user claiming the item
+     * @param quantity   the quantity of the item to claim
+     * @return the created claim
+     * @throws RuntimeException         if the lost item is not found
+     * @throws InvalidUserIdException   if the user ID is invalid
+     * @throws InvalidQuantityException if the quantity is invalid
+     */
     public Claim claimItem(Long lostItemId, Long userId, int quantity) {
         LostItem lostItem = lostItemRepository.findById(lostItemId).orElseThrow(() -> new RuntimeException("Item not found"));
 
@@ -63,6 +86,11 @@ public class LostItemService {
         return claim;
     }
 
+    /**
+     * Retrieves all claims from the repository.
+     *
+     * @return a list of all claims
+     */
     public List<Claim> getAllClaims() {
         return claimRepository.findAll();
     }
