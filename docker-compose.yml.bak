@@ -1,0 +1,19 @@
+version: '3.8'
+
+services:
+  oracle-db:
+    image: container-registry.oracle.com/database/express:21.3.0-xe
+    container_name: oracle-express-db
+    ports:
+      - "1521:1521"
+      - "5500:5500"
+    environment:
+      - DB_NAME=XEPDB1
+      - DB_USER=LOSTANDFOUND
+      - ORACLE_PWD=L0stButF0und
+    volumes:
+      - oracle-data:/opt/oracle/oradata
+
+volumes:
+  oracle-data:
+    driver: local
