@@ -11,8 +11,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
-public class PdfParserUtil {
-    private PdfParserUtil() {
+public class PdfFileParserUtil {
+    private PdfFileParserUtil() {
     }
 
     public static List<LostItem> parseFile(MultipartFile file) {
@@ -41,7 +41,7 @@ public class PdfParserUtil {
         return text.split("\n");
     }
 
-    private static List<LostItem> parseLinesIntoLostItems(String[] lines) {
+    public static List<LostItem> parseLinesIntoLostItems(String[] lines) {
         List<LostItem> lostItems = new ArrayList<>();
         LostItem currentItem = null;
 

@@ -5,7 +5,7 @@ import org.example.lostandfoundapp.dto.LostItemDTO;
 import org.example.lostandfoundapp.model.Claim;
 import org.example.lostandfoundapp.model.LostItem;
 import org.example.lostandfoundapp.service.LostItemService;
-import org.example.lostandfoundapp.util.PdfParserUtil;
+import org.example.lostandfoundapp.util.PdfFileParserUtil;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -31,6 +31,9 @@ public class LostItemController {
     public ResponseEntity<String> uploadFile(@RequestParam("file") MultipartFile file) {
         List<LostItem> items = readLostItemsFromPDF(file);
         items.forEach(lostItemService::saveLostItem);
+
+        log.info("Lost items were successfully stored in the database.");
+
         return ResponseEntity.ok("File uploaded and items saved successfully.");
     }
 
@@ -46,6 +49,7 @@ public class LostItemController {
 
     @GetMapping()
     public List<LostItem> getAllLostItems() {
+        log.info("All lost items are being retrieved from the database.");
         return lostItemService.getAllLostItems();
     }
 
@@ -58,10 +62,13 @@ public class LostItemController {
     @GetMapping("/claims")
     public ResponseEntity<List<Claim>> getAllClaims() {
         List<Claim> claims = lostItemService.getAllClaims();
+
+        log.info("All claims were retrieved from the database.");
+
         return ResponseEntity.ok(claims);
     }
 
     private List<LostItem> readLostItemsFromPDF(MultipartFile file) {
-        return PdfParserUtil.parseFile(file);
+        return PdfFileParserUtil.parseFile(file);
     }
 }
