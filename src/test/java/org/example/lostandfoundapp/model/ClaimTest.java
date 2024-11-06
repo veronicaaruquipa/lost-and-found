@@ -1,7 +1,5 @@
-package org.example.lostandfoundapp.service.model;
+package org.example.lostandfoundapp.model;
 
-import org.example.lostandfoundapp.model.Claim;
-import org.example.lostandfoundapp.model.LostItem;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

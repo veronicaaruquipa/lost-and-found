@@ -1,7 +1,6 @@
-package util;
+package org.example.lostandfoundapp.util;
 
 import org.example.lostandfoundapp.model.LostItem;
-import org.example.lostandfoundapp.util.PdfFileParserUtil;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;

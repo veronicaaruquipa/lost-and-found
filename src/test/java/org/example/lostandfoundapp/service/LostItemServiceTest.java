@@ -1,11 +1,9 @@
-package service;
+package org.example.lostandfoundapp.service;
 
 import org.example.lostandfoundapp.model.Claim;
 import org.example.lostandfoundapp.model.LostItem;
 import org.example.lostandfoundapp.repository.ClaimRepository;
 import org.example.lostandfoundapp.repository.LostItemRepository;
-import org.example.lostandfoundapp.service.LostItemService;
-import org.example.lostandfoundapp.service.MockUserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
