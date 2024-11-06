@@ -63,7 +63,7 @@ public class LostItemController {
     public ResponseEntity<List<Claim>> getAllClaims() {
         List<Claim> claims = lostItemService.getAllClaims();
 
-        log.info("All claims were retrieved from the database.");
+        log.info("Claimed items are retrieved from the database.");
 
         return ResponseEntity.ok(claims);
     }
