@@ -27,17 +27,17 @@ with a mock user service to retrieve user information.
    cd lost-and-found
 
 2. **Set Up the Database**
-   The application uses an Oracle database. To run the application, you need to have Oracle up and running. You can spin
+
+   * The application uses an Oracle database. To run the application, you need to have Oracle up and running. You can spin
    up docker container locally or use docker-compose to run the application.
      ```sh
      docker run -d --name oracle-express-db -p 1521:1521 -p 5500:5500 -e ORACLE_PWD=<YOUR_DB_USER_PASSWORD> -v <DIR_LOCALLY_DEFINED>:/opt/oracle/oradata container-registry.oracle.com/database/express:21.3.0-xe
      docker exec oracle-express-db ./setPassword.sh <YOUR_DB_USER_PASSWORD>
-
-The database will be available at `localhost:1521` with the following credentials:
-
-- *Username*: `SYSTEM`
-- *Password*: `<YOUR_DB_USER_PASSWORD>`
-- *Service Name*: `XE`
+     
+   *   The database will be available at `localhost:1521` with the following credentials:
+       - *Username*: `SYSTEM`
+       - *Password*: `<YOUR_DB_USER_PASSWORD>`
+       - *Service Name*: `XE`  
 
 3. **Run tests**
    ```sh
